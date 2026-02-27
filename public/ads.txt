@@ -1,0 +1,3 @@
+# ads.txt
+# This file lists the authorized digital sellers of our inventory.
+# Since we do not currently run ads, this file prevents unauthorized sales.

@@ -1,0 +1,2 @@
+// Initial creation of translation-home.md to track extraction
+// This file is temporary and not part of the project codebase
