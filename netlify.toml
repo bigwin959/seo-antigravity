@@ -1,11 +1,28 @@
 [build]
   command = "npm install --legacy-peer-deps && npm run build"
   publish = "dist"
+  functions = "netlify/functions"
 
+# Route /api/posts/:slug to the slug handler function
+[[redirects]]
+  from = "/api/posts/:slug"
+  to = "/.netlify/functions/posts-slug"
+  status = 200
+  force = true
+
+# Route /api/posts to the posts handler function
+[[redirects]]
+  from = "/api/posts"
+  to = "/.netlify/functions/posts"
+  status = 200
+  force = true
+
+# SPA fallback - must be last
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
 
 [build.environment]
   NODE_VERSION = "20.19.6"
