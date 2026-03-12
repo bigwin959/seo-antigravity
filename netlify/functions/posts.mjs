@@ -39,5 +39,3 @@ export default async function handler(req, context) {
         return new Response(JSON.stringify({ message: error.message }), { status: 500, headers });
     }
 }
-
-export const config = { path: '/api/posts' };

@@ -12,7 +12,14 @@ export default async function handler(req, context) {
         return new Response('', { status: 204, headers });
     }
 
-    const slug = context.params.slug;
+    // Extract slug from URL path: /api/posts/:slug
+    const url = new URL(req.url);
+    const pathParts = url.pathname.split('/');
+    const slug = pathParts[pathParts.length - 1];
+
+    if (!slug) {
+        return new Response(JSON.stringify({ message: 'Slug is required' }), { status: 400, headers });
+    }
 
     try {
         await connectToDatabase();
@@ -42,5 +49,3 @@ export default async function handler(req, context) {
         return new Response(JSON.stringify({ message: error.message }), { status: 500, headers });
     }
 }
-
-export const config = { path: '/api/posts/:slug' };
