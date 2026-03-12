@@ -24,9 +24,12 @@ const AdminBlog: React.FC = () => {
     try {
       const response = await fetch('/api/posts');
       const data = await response.json();
-      setPosts(data);
+      // Guard: if backend returns an error object instead of array
+      setPosts(Array.isArray(data) ? data : []);
+      if (!response.ok) console.error('API error:', data.message);
     } catch (error) {
       console.error('Error fetching posts:', error);
+      setPosts([]);
     } finally {
       setLoading(false);
     }
