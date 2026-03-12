@@ -1,17 +1,21 @@
+import dns from 'dns';
+dns.setDefaultResultOrder('ipv4first');
+
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 import Post from './models/Post.js';
 
-dotenv.config();
+// Load .env from project root
+const __dirname = dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: resolve(__dirname, '../.env') });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-// Properly encode the username and password in case they contain special characters like '@'
-const username = encodeURIComponent('bigwintiktok4_db_user');
-const password = encodeURIComponent('adminadmin123123');
-const MONGODB_URI = process.env.MONGODB_URI || `mongodb+srv://${username}:${password}@cluster0.wqst94k.mongodb.net/bigwin_blog`;
+const MONGODB_URI = process.env.MONGODB_URI;
 
 // Middleware
 app.use(cors());
@@ -50,7 +54,7 @@ app.get('/api/posts/:slug', async (req, res) => {
 app.post('/api/posts', async (req, res) => {
   try {
     const { title, content, excerpt, metaTitle, metaDescription, metaKeywords, author, published } = req.body;
-    
+
     // Auto-generate slug from title if not provided
     let slug = req.body.slug;
     if (!slug) {

@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "server": "node --dns-result-order=ipv4first server/index.js",
     "generate-sitemap": "node scripts/generate_sitemap.mjs && node scripts/generate_multilingual_sitemap.js"
   },
   "dependencies": {
@@ -22,7 +23,7 @@
     "i18next-browser-languagedetector": "^8.2.0",
     "i18next-http-backend": "^3.0.2",
     "lucide-react": "^0.560.0",
-    "mongoose": "^9.2.3",
+    "mongoose": "^9.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
