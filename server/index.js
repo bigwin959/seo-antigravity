@@ -53,7 +53,7 @@ app.get('/api/posts/:slug', async (req, res) => {
 // 3. Create a new post (Admin)
 app.post('/api/posts', async (req, res) => {
   try {
-    const { title, content, excerpt, metaTitle, metaDescription, metaKeywords, author, published } = req.body;
+    const { title, content, excerpt, metaTitle, metaDescription, metaKeywords, author, published, ctaLinks } = req.body;
 
     // Auto-generate slug from title if not provided
     let slug = req.body.slug;
@@ -70,7 +70,8 @@ app.post('/api/posts', async (req, res) => {
       metaDescription,
       metaKeywords,
       author,
-      published
+      published,
+      ctaLinks
     });
 
     const savedPost = await newPost.save();

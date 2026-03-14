@@ -6,7 +6,7 @@
 # Route /api/posts/:slug to the slug handler function
 [[redirects]]
   from = "/api/posts/:slug"
-  to = "/.netlify/functions/posts-slug"
+  to = "/.netlify/functions/posts-slug?slug=:slug"
   status = 200
   force = true
 

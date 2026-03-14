@@ -15,6 +15,7 @@ interface Post {
   published: boolean;
   createdAt: string;
   updatedAt: string;
+  ctaLinks?: { text: string; url: string }[];
 }
 
 const DynamicBlogPost: React.FC = () => {
@@ -65,7 +66,7 @@ const DynamicBlogPost: React.FC = () => {
         <title>{post.metaTitle || `${post.title} | BIGWIN959 Blog`}</title>
         <meta name="description" content={post.metaDescription || post.excerpt} />
         {post.metaKeywords && <meta name="keywords" content={post.metaKeywords} />}
-        
+
         {/* Open Graph / Social Media Meta Tags */}
         <meta property="og:title" content={post.metaTitle || post.title} />
         <meta property="og:description" content={post.metaDescription || post.excerpt} />
@@ -79,11 +80,11 @@ const DynamicBlogPost: React.FC = () => {
           <ArrowLeft size={16} className="mr-2" />
           Back to all posts
         </Link>
-        
+
         <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
           {post.title}
         </h1>
-        
+
         <div className="flex flex-wrap items-center gap-6 text-sm text-gray-400 border-b border-gray-800 pb-8">
           <div className="flex items-center gap-2">
             <User size={18} className="text-brand" />
@@ -107,11 +108,27 @@ const DynamicBlogPost: React.FC = () => {
         Because we're using "prose prose-invert prose-brand" classes, 
         the raw HTML from TipTap WYSIWYG editor will be perfectly styled to match the site's design. 
       */}
-      <div 
+      <div
         className="prose prose-invert prose-brand prose-lg max-w-none prose-img:rounded-xl prose-img:shadow-2xl prose-a:text-brand hover:prose-a:text-yellow-400 prose-headings:text-white marker:text-brand"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
-      
+
+      {post.ctaLinks && post.ctaLinks.length > 0 && (
+        <div className="mt-12 flex flex-col items-center gap-4 border-t border-gray-800 pt-8">
+          {post.ctaLinks.map((cta, index) => (
+            <a
+              key={index}
+              href={cta.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-brand text-black px-8 py-3 rounded-full font-bold shadow-[0_0_15px_rgba(255,215,0,0.3)] hover:shadow-[0_0_25px_rgba(255,215,0,0.5)] transition-all transform hover:-translate-y-1 w-full max-w-md text-center text-lg"
+            >
+              {cta.text}
+            </a>
+          ))}
+        </div>
+      )}
+
       <div className="mt-16 pt-8 border-t border-gray-800 text-center">
         <h3 className="text-2xl font-bold text-white mb-4">Ready to put your knowledge to the test?</h3>
         <Link to="/" className="inline-block bg-brand text-black px-8 py-3 rounded-full font-bold shadow-[0_0_15px_rgba(255,215,0,0.3)] hover:shadow-[0_0_25px_rgba(255,215,0,0.5)] transition-all transform hover:-translate-y-1">

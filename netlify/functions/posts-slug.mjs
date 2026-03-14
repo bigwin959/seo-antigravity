@@ -12,10 +12,9 @@ export default async function handler(req, context) {
         return new Response('', { status: 204, headers });
     }
 
-    // Extract slug from URL path: /api/posts/:slug
+    // Extract slug from URL query params (handled by netlify.toml redirect)
     const url = new URL(req.url);
-    const pathParts = url.pathname.split('/');
-    const slug = pathParts[pathParts.length - 1];
+    const slug = url.searchParams.get('slug') || url.pathname.split('/').pop();
 
     if (!slug) {
         return new Response(JSON.stringify({ message: 'Slug is required' }), { status: 400, headers });

@@ -22,13 +22,13 @@ export default async function handler(req, context) {
 
         if (req.method === 'POST') {
             const body = await req.json();
-            let { title, slug, content, excerpt, metaTitle, metaDescription, metaKeywords, author, published } = body;
+            let { title, slug, content, excerpt, metaTitle, metaDescription, metaKeywords, author, published, ctaLinks } = body;
 
             if (!slug) {
                 slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
             }
 
-            const post = new Post({ title, slug, content, excerpt, metaTitle, metaDescription, metaKeywords, author, published });
+            const post = new Post({ title, slug, content, excerpt, metaTitle, metaDescription, metaKeywords, author, published, ctaLinks });
             const saved = await post.save();
             return new Response(JSON.stringify(saved), { status: 201, headers });
         }

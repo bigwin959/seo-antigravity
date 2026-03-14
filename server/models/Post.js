@@ -27,7 +27,11 @@ const postSchema = new mongoose.Schema({
   published: {
     type: Boolean,
     default: true
-  }
+  },
+  ctaLinks: [{
+    text: String,
+    url: String
+  }]
 }, {
   timestamps: true
 });

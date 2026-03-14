@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import AdminWysiwyg from '../components/AdminWysiwyg';
 import { Helmet } from 'react-helmet-async';
-import { ArrowLeft, Save, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Save, AlertCircle, Trash2 } from 'lucide-react';
 
 const AdminBlogEdit: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -19,6 +19,7 @@ const AdminBlogEdit: React.FC = () => {
     metaDescription: '',
     metaKeywords: '',
     published: true,
+    ctaLinks: [] as { text: string; url: string }[],
   });
 
   const [loading, setLoading] = useState(!isNew);
@@ -36,7 +37,7 @@ const AdminBlogEdit: React.FC = () => {
       const res = await fetch(`/api/posts/${slug}`);
       if (!res.ok) throw new Error('Failed to fetch post');
       const data = await res.json();
-      setFormData(data);
+      setFormData({ ...data, ctaLinks: data.ctaLinks || [] });
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -56,6 +57,21 @@ const AdminBlogEdit: React.FC = () => {
 
   const handleEditorChange = (content: string) => {
     setFormData((prev) => ({ ...prev, content }));
+  };
+
+  const handleCtaChange = (index: number, field: 'text' | 'url', value: string) => {
+    const newLinks = [...formData.ctaLinks];
+    newLinks[index][field] = value;
+    setFormData((prev) => ({ ...prev, ctaLinks: newLinks }));
+  };
+
+  const addCtaLink = () => {
+    setFormData((prev) => ({ ...prev, ctaLinks: [...prev.ctaLinks, { text: '', url: '' }] }));
+  };
+
+  const removeCtaLink = (index: number) => {
+    const newLinks = formData.ctaLinks.filter((_, i) => i !== index);
+    setFormData((prev) => ({ ...prev, ctaLinks: newLinks }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -126,12 +142,12 @@ const AdminBlogEdit: React.FC = () => {
 
       <form onSubmit={handleSubmit} className="space-y-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
+
           {/* Main Content Area */}
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-[#1a1a1a] p-6 rounded-lg border border-gray-800 shadow-xl space-y-4">
               <h2 className="text-xl font-bold text-brand pb-2 border-b border-gray-800">Content Details</h2>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-1">Title *</label>
                 <input
@@ -164,6 +180,48 @@ const AdminBlogEdit: React.FC = () => {
                   placeholder="A short summary of the post..."
                 />
               </div>
+
+              {/* Custom CTA Links Section */}
+              <div className="pt-4 mt-6 border-t border-gray-800">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-bold text-white">Custom CTA Links</h3>
+                  <button
+                    type="button"
+                    onClick={addCtaLink}
+                    className="text-sm bg-brand text-black px-3 py-1 rounded font-bold hover:bg-yellow-400"
+                  >
+                    + Add Link
+                  </button>
+                </div>
+                {formData.ctaLinks.map((cta, index) => (
+                  <div key={index} className="flex gap-4 mb-4 items-start">
+                    <div className="flex-1 space-y-2">
+                      <input
+                        type="text"
+                        placeholder="Link Text (e.g. Claim Bonus)"
+                        value={cta.text}
+                        onChange={(e) => handleCtaChange(index, 'text', e.target.value)}
+                        className="w-full bg-slate-800 border-gray-700 rounded shadow-sm focus:border-brand text-white p-2 text-sm"
+                      />
+                      <input
+                        type="text"
+                        placeholder="URL (e.g. https://example.com/promo)"
+                        value={cta.url}
+                        onChange={(e) => handleCtaChange(index, 'url', e.target.value)}
+                        className="w-full bg-slate-800 border-gray-700 rounded shadow-sm focus:border-brand text-white p-2 text-sm"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeCtaLink(index)}
+                      className="p-2 text-red-400 hover:bg-red-500/10 rounded mt-1"
+                      title="Remove Link"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -171,7 +229,7 @@ const AdminBlogEdit: React.FC = () => {
           <div className="space-y-6">
             <div className="bg-[#1a1a1a] p-6 rounded-lg border border-gray-800 shadow-xl space-y-4">
               <h2 className="text-xl font-bold text-brand pb-2 border-b border-gray-800">Publishing</h2>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-1">Status</label>
                 <div className="flex items-center gap-2 mt-2">

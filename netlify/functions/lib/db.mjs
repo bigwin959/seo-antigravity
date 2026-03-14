@@ -10,6 +10,7 @@ const PostSchema = new mongoose.Schema({
     metaKeywords: { type: String, default: '' },
     author: { type: String, default: 'Admin' },
     published: { type: Boolean, default: true },
+    ctaLinks: [{ text: String, url: String }],
 }, { timestamps: true });
 
 let cachedDb = null;
