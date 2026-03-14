@@ -34,7 +34,7 @@ const AdminBlogEdit: React.FC = () => {
 
   const fetchPost = async () => {
     try {
-      const res = await fetch(`/api/posts/${slug}`);
+      const res = await fetch(`/api/posts/${encodeURIComponent(slug!)}`);
       if (!res.ok) throw new Error('Failed to fetch post');
       const data = await res.json();
       setFormData({ ...data, ctaLinks: data.ctaLinks || [] });
@@ -80,7 +80,7 @@ const AdminBlogEdit: React.FC = () => {
     setError('');
 
     try {
-      const url = isNew ? '/api/posts' : `/api/posts/${slug}`;
+      const url = isNew ? '/api/posts' : `/api/posts/${encodeURIComponent(slug!)}`;
       const method = isNew ? 'POST' : 'PUT';
 
       const res = await fetch(url, {

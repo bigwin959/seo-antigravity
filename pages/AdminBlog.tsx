@@ -38,7 +38,7 @@ const AdminBlog: React.FC = () => {
   const handleDelete = async (slug: string) => {
     if (window.confirm('Are you sure you want to delete this post?')) {
       try {
-        await fetch(`/api/posts/${slug}`, { method: 'DELETE' });
+        await fetch(`/api/posts/${encodeURIComponent(slug)}`, { method: 'DELETE' });
         fetchPosts();
       } catch (error) {
         console.error('Error deleting post:', error);
@@ -104,7 +104,7 @@ const AdminBlog: React.FC = () => {
                     <td className="p-4">
                       <div className="flex items-center justify-end gap-3">
                         <button
-                          onClick={() => navigate(`/admin/blog/edit/${post.slug}`)}
+                          onClick={() => navigate(`/admin/blog/edit/${encodeURIComponent(post.slug)}`)}
                           className="p-2 text-brand hover:bg-brand/10 rounded transition-colors"
                           title="Edit"
                         >

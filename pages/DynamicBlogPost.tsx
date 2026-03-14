@@ -27,7 +27,7 @@ const DynamicBlogPost: React.FC = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch(`/api/posts/${slug}`);
+        const response = await fetch(`/api/posts/${encodeURIComponent(slug!)}`);
         if (!response.ok) throw new Error('Post not found');
         const data = await response.json();
         setPost(data);
