@@ -30,6 +30,14 @@ mongoose.connect(MONGODB_URI)
 // 1. Get all published blog posts (frontend)
 app.get('/api/posts', async (req, res) => {
   try {
+    if (req.query.slug) {
+      const post = await Post.findOne({ slug: req.query.slug });
+      if (!post) {
+        return res.status(404).json({ message: 'Post not found' });
+      }
+      return res.json(post);
+    }
+
     const posts = await Post.find().sort({ createdAt: -1 });
     res.json(posts);
   } catch (error) {
@@ -37,18 +45,7 @@ app.get('/api/posts', async (req, res) => {
   }
 });
 
-// 2. Get a single post by slug
-app.get('/api/posts/:slug', async (req, res) => {
-  try {
-    const post = await Post.findOne({ slug: req.params.slug });
-    if (!post) {
-      return res.status(404).json({ message: 'Post not found' });
-    }
-    res.json(post);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching post', error });
-  }
-});
+// (Endpoint consolidated into GET /api/posts?slug=... above)
 
 // 3. Create a new post (Admin)
 app.post('/api/posts', async (req, res) => {
@@ -83,10 +80,11 @@ app.post('/api/posts', async (req, res) => {
 });
 
 // 4. Update an existing post (Admin)
-app.put('/api/posts/:slug', async (req, res) => {
+app.put('/api/posts', async (req, res) => {
   try {
+    if (!req.query.slug) return res.status(400).json({ message: 'Slug query parameter required' });
     const post = await Post.findOneAndUpdate(
-      { slug: req.params.slug },
+      { slug: req.query.slug },
       req.body,
       { new: true }
     );
@@ -100,9 +98,10 @@ app.put('/api/posts/:slug', async (req, res) => {
 });
 
 // 5. Delete a post (Admin)
-app.delete('/api/posts/:slug', async (req, res) => {
+app.delete('/api/posts', async (req, res) => {
   try {
-    const post = await Post.findOneAndDelete({ slug: req.params.slug });
+    if (!req.query.slug) return res.status(400).json({ message: 'Slug query parameter required' });
+    const post = await Post.findOneAndDelete({ slug: req.query.slug });
     if (!post) {
       return res.status(404).json({ message: 'Post not found' });
     }

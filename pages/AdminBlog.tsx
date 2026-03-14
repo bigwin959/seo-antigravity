@@ -38,7 +38,7 @@ const AdminBlog: React.FC = () => {
   const handleDelete = async (slug: string) => {
     if (window.confirm('Are you sure you want to delete this post?')) {
       try {
-        await fetch(`/api/posts/${encodeURIComponent(slug)}`, { method: 'DELETE' });
+        await fetch(`/api/posts?slug=${encodeURIComponent(slug)}`, { method: 'DELETE' });
         fetchPosts();
       } catch (error) {
         console.error('Error deleting post:', error);
