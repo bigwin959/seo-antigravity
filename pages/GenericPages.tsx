@@ -914,8 +914,8 @@ export const BlogPage: React.FC = () => {
                         <article key={post._id} className="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-brand transition-colors group flex flex-col h-full relative">
                             {/* NEW BADGE */}
                             <div className="absolute top-4 right-4 bg-brand text-black font-bold text-xs px-2 py-1 rounded z-10">NEW</div>
-                            
-                            <LocalizedLink to={`/blog/post/${post.slug}`} className="block h-48 overflow-hidden bg-gray-900 relative">
+
+                            <LocalizedLink to={`/blog/post/${encodeURIComponent(post.slug)}`} className="block h-48 overflow-hidden bg-gray-900 relative">
                                 {/* TipTap doesn't guarantee images on top, we just use a fallback banner or if there's an image we'll parse it maybe. Here just a fallback */}
                                 <div className="absolute inset-0 bg-gradient-to-tr from-brand/20 to-transparent flex items-center justify-center">
                                     <span className="text-brand opacity-20 font-extrabold text-5xl">BLOG</span>
@@ -923,11 +923,11 @@ export const BlogPage: React.FC = () => {
                             </LocalizedLink>
                             <div className="p-6 flex flex-col flex-grow relative z-10">
                                 <div className="text-sm text-brand mb-2 font-bold">{formatDate(post.createdAt)}</div>
-                                <LocalizedLink to={`/blog/post/${post.slug}`}>
+                                <LocalizedLink to={`/blog/post/${encodeURIComponent(post.slug)}`}>
                                     <h2 className="text-xl font-bold text-white mb-3 group-hover:text-brand transition-colors">{post.title}</h2>
                                 </LocalizedLink>
                                 <p className="text-gray-400 mb-6 flex-grow">{post.excerpt || 'Read this breaking post from BIGWIN959.'}</p>
-                                <LocalizedLink to={`/blog/post/${post.slug}`} className="inline-flex items-center text-white font-bold hover:text-brand transition-colors">
+                                <LocalizedLink to={`/blog/post/${encodeURIComponent(post.slug)}`} className="inline-flex items-center text-white font-bold hover:text-brand transition-colors">
                                     {t('blogPage.readMore')} <ArrowRight className="w-4 h-4 ml-2" />
                                 </LocalizedLink>
                             </div>
