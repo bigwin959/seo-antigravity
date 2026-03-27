@@ -11,6 +11,7 @@ const AdminBlogEdit: React.FC = () => {
 
   const [formData, setFormData] = useState({
     title: '',
+    language: 'en',
     slug: '',
     author: 'Admin',
     excerpt: '',
@@ -159,6 +160,19 @@ const AdminBlogEdit: React.FC = () => {
                   className="w-full bg-slate-800 border-gray-700 rounded-md shadow-sm focus:border-brand focus:ring-brand text-white p-2"
                   placeholder="The Best Winning Strategies for 2024"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Language</label>
+                <select
+                  name="language"
+                  value={formData.language as any}
+                  onChange={handleChange}
+                  className="w-full bg-slate-800 border-gray-700 rounded-md shadow-sm focus:border-brand focus:ring-brand text-white p-2"
+                >
+                  <option value="en">English</option>
+                  <option value="bn">Bengali</option>
+                </select>
               </div>
 
               <div>

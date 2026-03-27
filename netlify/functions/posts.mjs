@@ -32,13 +32,17 @@ export default async function handler(req, context) {
 
         if (req.method === 'POST') {
             const body = await req.json();
-            let { title, slug, content, excerpt, metaTitle, metaDescription, metaKeywords, author, published, ctaLinks } = body;
+            let { title, language, slug, content, excerpt, metaTitle, metaDescription, metaKeywords, author, published, ctaLinks } = body;
 
             if (!slug) {
-                slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+                slug = title.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '-').replace(/(^-|-$)+/g, '');
+                // Fallback if slug is completely empty after replacement
+                if (!slug) {
+                    slug = Date.now().toString();
+                }
             }
 
-            const post = new Post({ title, slug, content, excerpt, metaTitle, metaDescription, metaKeywords, author, published, ctaLinks });
+            const post = new Post({ title, language, slug, content, excerpt, metaTitle, metaDescription, metaKeywords, author, published, ctaLinks });
             const saved = await post.save();
             return new Response(JSON.stringify(saved), { status: 201, headers });
         }

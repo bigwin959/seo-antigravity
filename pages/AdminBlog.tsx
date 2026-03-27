@@ -7,6 +7,7 @@ interface Post {
   _id: string;
   title: string;
   slug: string;
+  language?: string;
   published: boolean;
   createdAt: string;
 }
@@ -74,6 +75,7 @@ const AdminBlog: React.FC = () => {
             <thead>
               <tr className="bg-slate-800 text-gray-300 border-b border-gray-700">
                 <th className="p-4 font-semibold">Title</th>
+                <th className="p-4 font-semibold">Language</th>
                 <th className="p-4 font-semibold">Status</th>
                 <th className="p-4 font-semibold">Date</th>
                 <th className="p-4 font-semibold text-right">Actions</th>
@@ -92,6 +94,9 @@ const AdminBlog: React.FC = () => {
                     <td className="p-4">
                       <div className="font-medium text-white">{post.title}</div>
                       <div className="text-sm text-gray-500 truncate max-w-sm">/{post.slug}</div>
+                    </td>
+                    <td className="p-4">
+                      {post.language === 'bn' ? 'Bengali' : 'English'}
                     </td>
                     <td className="p-4">
                       <span className={`px-2 py-1 text-xs font-semibold rounded-full ${post.published ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>

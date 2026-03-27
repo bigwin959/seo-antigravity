@@ -50,16 +50,21 @@ app.get('/api/posts', async (req, res) => {
 // 3. Create a new post (Admin)
 app.post('/api/posts', async (req, res) => {
   try {
-    const { title, content, excerpt, metaTitle, metaDescription, metaKeywords, author, published, ctaLinks } = req.body;
+    const { title, language, content, excerpt, metaTitle, metaDescription, metaKeywords, author, published, ctaLinks } = req.body;
 
     // Auto-generate slug from title if not provided
     let slug = req.body.slug;
     if (!slug) {
-      slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+      slug = title.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '-').replace(/(^-|-$)+/g, '');
+      // Fallback if slug is completely empty after replacement
+      if (!slug) {
+        slug = Date.now().toString();
+      }
     }
 
     const newPost = new Post({
       title,
+      language,
       slug,
       content,
       excerpt,
