@@ -25,7 +25,7 @@ export default async function handler(req, context) {
                 if (!post) return new Response(JSON.stringify({ message: 'Post not found' }), { status: 404, headers });
                 return new Response(JSON.stringify(post), { status: 200, headers });
             } else {
-                const posts = await Post.find().sort({ createdAt: -1 });
+                const posts = await Post.find().select('-content').sort({ createdAt: -1 });
                 return new Response(JSON.stringify(posts), { status: 200, headers });
             }
         }

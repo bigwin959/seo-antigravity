@@ -16,6 +16,7 @@ interface Post {
   createdAt: string;
   updatedAt: string;
   ctaLinks?: { text: string; url: string }[];
+  language?: string;
 }
 
 const DynamicBlogPost: React.FC = () => {
@@ -78,7 +79,7 @@ const DynamicBlogPost: React.FC = () => {
       <div className="mb-8">
         <Link to="/blog" className="inline-flex items-center text-brand hover:text-white transition-colors mb-6 font-semibold">
           <ArrowLeft size={16} className="mr-2" />
-          Back to all posts
+          {post.language === 'bn' ? 'সব পোস্টে ফিরে যান' : 'Back to all posts'}
         </Link>
 
         <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
@@ -88,12 +89,12 @@ const DynamicBlogPost: React.FC = () => {
         <div className="flex flex-wrap items-center gap-6 text-sm text-gray-400 border-b border-gray-800 pb-8">
           <div className="flex items-center gap-2">
             <User size={18} className="text-brand" />
-            <span>{post.author || 'BIGWIN959 Expert'}</span>
+            <span>{post.author || (post.language === 'bn' ? 'BIGWIN959 বিশেষজ্ঞ' : 'BIGWIN959 Expert')}</span>
           </div>
           <div className="flex items-center gap-2">
             <Calendar size={18} className="text-brand" />
             <time dateTime={post.createdAt}>
-              {new Date(post.createdAt).toLocaleDateString('en-US', {
+              {new Date(post.createdAt).toLocaleDateString(post.language === 'bn' ? 'bn-BD' : 'en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
@@ -115,24 +116,33 @@ const DynamicBlogPost: React.FC = () => {
 
       {post.ctaLinks && post.ctaLinks.length > 0 && (
         <div className="mt-12 flex flex-col items-center gap-4 border-t border-gray-800 pt-8">
-          {post.ctaLinks.map((cta, index) => (
-            <a
-              key={index}
-              href={cta.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-brand text-black px-8 py-3 rounded-full font-bold shadow-[0_0_15px_rgba(255,215,0,0.3)] hover:shadow-[0_0_25px_rgba(255,215,0,0.5)] transition-all transform hover:-translate-y-1 w-full max-w-md text-center text-lg"
-            >
-              {cta.text}
-            </a>
-          ))}
+          {post.ctaLinks.map((cta, index) => {
+            let absoluteUrl = cta.url;
+            if (!/^https?:\/\//i.test(absoluteUrl)) {
+              absoluteUrl = `https://${absoluteUrl}`;
+            }
+
+            return (
+              <a
+                key={index}
+                href={absoluteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-brand text-black px-8 py-3 rounded-full font-bold shadow-[0_0_15px_rgba(255,215,0,0.3)] hover:shadow-[0_0_25px_rgba(255,215,0,0.5)] transition-all transform hover:-translate-y-1 w-full max-w-md text-center text-lg"
+              >
+                {cta.text}
+              </a>
+            );
+          })}
         </div>
       )}
 
       <div className="mt-16 pt-8 border-t border-gray-800 text-center">
-        <h3 className="text-2xl font-bold text-white mb-4">Ready to put your knowledge to the test?</h3>
+        <h3 className="text-2xl font-bold text-white mb-4">
+          {post.language === 'bn' ? 'আপনার জ্ঞান পরীক্ষা করতে প্রস্তুত?' : 'Ready to put your knowledge to the test?'}
+        </h3>
         <Link to="/" className="inline-block bg-brand text-black px-8 py-3 rounded-full font-bold shadow-[0_0_15px_rgba(255,215,0,0.3)] hover:shadow-[0_0_25px_rgba(255,215,0,0.5)] transition-all transform hover:-translate-y-1">
-          Play Now at BIGWIN959
+          {post.language === 'bn' ? 'BIGWIN959-এ এখন খেলুন' : 'Play Now at BIGWIN959'}
         </Link>
       </div>
     </article>
